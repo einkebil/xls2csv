@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.yokul</groupId>
+	<artifactId>xls-parsing</artifactId>
+	<version>0.0.1</version>
+	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	</properties>
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+ 	<dependency>
+			<groupId>org.apache.ivy</groupId>
+			<artifactId>ivy</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+
+						<configuration>
+							<promoteTransitiveDependencies>false</promoteTransitiveDependencies>
+
+
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>org.yokul.xlsparsing.Launch</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>1.7.15</version>
+				<executions>
+					<execution>
+						<id>l4j-clui</id>
+						<phase>package</phase>
+						<goals>
+							<!--							<goal>launch4j< / goal>-->
+						</goals>
+						<configuration>
+							<headerType>console</headerType>
+							<outfile>${project.build.directory}/${project.artifactId}-${project.version}.exe</outfile>
+							<jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
+							<!-- <icon>${project.build.directory}/../src/main/resources/favicon.ico</icon> -->
+							<errTitle>encc</errTitle>
+							<classPath>
+								<mainClass>org.yokul.xlsparsing.Launch</mainClass>
+								<addDependencies>false</addDependencies>
+								<preCp>anything</preCp>
+							</classPath>
+							<!-- 							<splash> -->
+							<!-- 								<file>matrix.gif</file> -->
+							<!-- 								<waitForWindow>true</waitForWindow> -->
+							<!-- 								<timeout>10</timeout> -->
+							<!-- 								<timeoutErr>false</timeoutErr> -->
+							<!-- 							</splash> -->
+							<icon>icon.ico</icon>
+							<jre>
+								<minVersion>1.8.0</minVersion>
+								<jdkPreference>preferJre</jdkPreference>
+
+								<!-- <opts> -->
+								<!-- <opt>-Djava.library.path=lib</opt> -->
+								<!-- </opts> -->
+							</jre>
+							<versionInfo>
+								<fileVersion>0.1.0.0</fileVersion>
+								<txtFileVersion>test</txtFileVersion>
+								<fileDescription>xxxx</fileDescription>
+								<copyright>xxxx</copyright>
+								<productVersion>${project.version}.0</productVersion>
+								<txtProductVersion>${project.version}.0</txtProductVersion>
+								<productName>xxx</productName>
+								<internalName>xxx</internalName>
+								<originalFilename>xlsparsing-${project.version}.exe</originalFilename>
+							</versionInfo>
+							<jar>target/${project.artifactId}-${project.version}.jar</jar>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.0</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>
